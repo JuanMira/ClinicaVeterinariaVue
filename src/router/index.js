@@ -1,29 +1,70 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import store from "../store/index";
 
-Vue.use(VueRouter)
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Pets from "../views/Pets.vue";
+import Login from "../views/Login.vue";
+import User from "../views/Users.vue";
+import Historial from "../views/Historial.vue";
+
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
+    meta: {
+      requireLogin: true,
+    },
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    path: "/pets",
+    name: "Pets",
+    component: Pets,
+    meta: {
+      requireLogin: true,
+    },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/users",
+    name: "User",
+    component: User,
+    meta: {
+      requireLogin: true,
+    },
+  },
+  {
+    path: "/historial",
+    name: "Historial",
+    component: Historial,
+    meta: {
+      requireLogin: true,
+    },
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  if (
+    to.matched.some((record) => record.meta.requireLogin) &&
+    !store.state.isAuthenticated
+  ) {
+    next({ name: "Login", query: { to: to.path } });
+  } else {
+    next();
+  }
+});
+
+export default router;

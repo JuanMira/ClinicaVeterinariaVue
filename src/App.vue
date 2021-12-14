@@ -1,32 +1,31 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <drawer v-if="$store.state.isAuthenticated" />
+    <app-bar v-if="$store.state.isAuthenticated" />
+
+    <v-main>
+      <v-layout fill-heigth>
+        <router-view />
+      </v-layout>
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import AppBar from "./components/generalComponents/AppBar.vue";
+import Drawer from "./components/generalComponents/Drawer.vue";
+export default {
+  components: {
+    AppBar,
+    Drawer,
+  },
+  name: "App",
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  data: () => ({
+    //
+  }),
+  created() {
+    this.$store.commit("initializeStore");
+  },
+};
+</script>

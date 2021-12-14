@@ -1,0 +1,6 @@
+mutation LogIn($credentials: CredentialsInput!) {
+  logIn(credentials: $credentials) {
+    access
+    refresh
+  }
+}
